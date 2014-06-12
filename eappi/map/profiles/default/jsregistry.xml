@@ -3,4 +3,12 @@
 
     <!-- -*- extra stuff goes here -*- -->
 
+    <javascript id="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js" 
+        cacheable="True"
+        enabled="True"
+        cookable="True"
+        compression="safe"
+        inline="False"
+        authenticated="False"/>
+
 </object>
