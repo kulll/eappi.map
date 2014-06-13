@@ -19,6 +19,13 @@ from plone.app.portlets.cache import render_cachekey
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from eappi.map import MessageFactory as _
+from Products.ATContentTypes.interfaces.topic import IATTopic
+from plone.app.collection.interfaces import ICollection
+from plone.app.vocabularies.catalog import SearchableTextSourceBinder
+from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
+
+
+
 
 class IEappiInternationalMap(IPortletDataProvider):
     """
@@ -34,6 +41,19 @@ class IEappiInternationalMap(IPortletDataProvider):
         title=_('Map height (in px)'),
         default=350
         )
+
+    """
+    Define your portlet schema here
+    """
+    map_data = schema.Choice(
+        title=_(u'Countries'),
+        source=SearchableTextSourceBinder(
+            {'object_provides': [ICollection.__identifier__,
+                                 IATTopic.__identifier__]},
+            default_query='path:'
+        )
+    )
+
 
 class Assignment(base.Assignment):
     implements(IEappiInternationalMap)
@@ -62,6 +82,7 @@ class AddForm(base.AddForm):
 #    fields = field.Fields(IEappiInternationalMap)
 
     form_fields = form.Fields(IEappiInternationalMap)
+    form_fields['map_data'].custom_widget = UberSelectionWidget
 
     label = _(u"Add Eappi International Map")
     description = _(u"")
@@ -77,6 +98,8 @@ class EditForm(base.EditForm):
 #    fields = field.Fields(IEappiInternationalMap)
 
     form_fields = form.Fields(IEappiInternationalMap)
+    form_fields['map_data'].custom_widget = UberSelectionWidget
+
 
     label = _(u"Edit Eappi International Map")
     description = _(u"")
