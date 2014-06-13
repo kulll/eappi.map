@@ -5,5 +5,13 @@
 
     <include package="plone.app.portlets" file="permissions.zcml"/>
     <!-- -*- extra stuff goes here -*- -->
+    <plone:portlet
+        name="eappi.map.portlet.EappiInternationalMap"
+        interface=".eappiinternationalmap.IEappiInternationalMap"
+        assignment=".eappiinternationalmap.Assignment"
+        renderer=".eappiinternationalmap.Renderer"
+        addview=".eappiinternationalmap.AddForm"
+        editview=".eappiinternationalmap.EditForm"
+        />
 
 </configure>

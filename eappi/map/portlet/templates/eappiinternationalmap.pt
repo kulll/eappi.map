@@ -1,0 +1,50 @@
+<dl class="portlet portletEappiInternationalMap"
+    i18n:domain="eappi.map">
+
+    <dt class="portletHeader">
+        <span class="portletTopLeft"></span>
+        Eappi International Map
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem">
+
+    <span></span>
+    <div id="map" style="height: ${view/data/map_height}px"></div>            
+    
+                                                                                
+<script type="text/javascript">                                                 
+var bounds = new L.LatLngBounds(new L.LatLng(29.5, -11.3), new L.LatLng(61.2, 2.5));
+
+
+                                                              
+var map = L.map( 'map', {                                                          
+    center: [20.0, 5.0],                                                           
+    zoomControl: false,
+    zoom: ${view/data/map_zoom} 
+
+});                                                                                
+// Disable drag and zoom handlers.
+map.dragging.disable();
+map.touchZoom.disable();
+map.doubleClickZoom.disable();
+map.scrollWheelZoom.disable();
+
+// Disable tap handler, if present.
+if (map.tap) map.tap.disable();
+                                                                                   
+L.tileLayer( 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {             
+    attribution: '&copy; <a href="http://osm.org/copyright" title="OpenStreetMap" target="_blank">OpenStreetMap</a> contributors | Tiles Courtesy of <a href="http://www.mapquest.com/" title="MapQuest" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png" width="16" height="16">',
+    subdomains: ['otile1','otile2','otile3','otile4']                              
+}).addTo( map );                                                                   
+                                                                                   
+</script>  
+
+    </dd>
+
+    <dd class="portletFooter">
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
+    </dd>
+
+</dl>
