@@ -23,8 +23,10 @@ from Products.ATContentTypes.interfaces.topic import IATTopic
 from plone.app.collection.interfaces import ICollection
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
-
-
+from AccessControl import getSecurityManager
+from plone.memoize.instance import memoize
+import json
+from geopy import geocoders
 
 
 class IEappiInternationalMap(IPortletDataProvider):
@@ -45,14 +47,14 @@ class IEappiInternationalMap(IPortletDataProvider):
     """
     Define your portlet schema here
     """
-    map_data = schema.Choice(
-        title=_(u'Countries'),
+
+    target_collection = schema.Choice(
+        title=_(u"Target collection"),
+        description=_(u"Find the collection which provides the items to display"),
+        required=True,
         source=SearchableTextSourceBinder(
-            {'object_provides': [ICollection.__identifier__,
-                                 IATTopic.__identifier__]},
-            default_query='path:'
-        )
-    )
+            {'portal_type': ('Topic', 'Collection')},
+            default_query='path:'))
 
 
 class Assignment(base.Assignment):
@@ -67,12 +69,66 @@ class Assignment(base.Assignment):
         return _('Eappi International Map')
 
 class Renderer(base.Renderer):
-    
+
     render = ViewPageTemplateFile('templates/eappiinternationalmap.pt')
 
     @property
     def available(self):
         return True
+
+    @memoize
+    def collection(self):
+        collection_path = self.data.target_collection
+        if not collection_path:
+            return None
+
+        if collection_path.startswith('/'):
+            collection_path = collection_path[1:]
+
+        if not collection_path:
+            return None
+
+        portal_state = getMultiAdapter((self.context, self.request),
+                                       name=u'plone_portal_state')
+        portal = portal_state.portal()
+        if isinstance(collection_path, unicode):
+            # restrictedTraverse accepts only strings
+            collection_path = str(collection_path)
+
+        result = portal.unrestrictedTraverse(collection_path, default=None)
+        if result is not None:
+            sm = getSecurityManager()
+            if not sm.checkPermission('View', result):
+                result = None
+        return result
+
+    @memoize
+    def map_marker(self):
+        collection = self.collection()
+        brains = collection.queryCatalog()
+
+        if not brains:
+            return None
+
+        map_data = list()
+        for i in brains:
+            obj = i.getObject()
+            lat = self._query_geolocation(obj.title)[0]
+            lng = self._query_geolocation(obj.title)[1]
+            map_data.append(
+                {'title': obj.title,
+                 'body': obj.getText(),
+                 'lat': lat,
+                 'lng': lng}
+                )
+        return json.dumps(map_data)
+
+    @memoize
+    def _query_geolocation(self, country):
+        geo = geocoders.OpenMapQuest()
+        location = geo.geocode(country)
+        return location[1]
+
 
 # XXX: z3cform
 # class AddForm(z3cformhelper.AddForm):
@@ -82,7 +138,7 @@ class AddForm(base.AddForm):
 #    fields = field.Fields(IEappiInternationalMap)
 
     form_fields = form.Fields(IEappiInternationalMap)
-    form_fields['map_data'].custom_widget = UberSelectionWidget
+    form_fields['target_collection'].custom_widget = UberSelectionWidget
 
     label = _(u"Add Eappi International Map")
     description = _(u"")
@@ -98,7 +154,7 @@ class EditForm(base.EditForm):
 #    fields = field.Fields(IEappiInternationalMap)
 
     form_fields = form.Fields(IEappiInternationalMap)
-    form_fields['map_data'].custom_widget = UberSelectionWidget
+    form_fields['target_collection'].custom_widget = UberSelectionWidget
 
 
     label = _(u"Edit Eappi International Map")

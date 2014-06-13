@@ -9,13 +9,13 @@
 
     <dd class="portletItem">
 
-    <span></span>
     <div id="map" style="height: ${view/data/map_height}px"></div>            
-    
+
                                                                                 
 <script type="text/javascript">                                                 
 var bounds = new L.LatLngBounds(new L.LatLng(29.5, -11.3), new L.LatLng(61.2, 2.5));
 
+var markers = <tal:block replace="structure view/data/map_marker"></tal:block>;
 
                                                               
 var map = L.map( 'map', {                                                          
@@ -38,6 +38,22 @@ L.tileLayer( 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
     subdomains: ['otile1','otile2','otile3','otile4']                              
 }).addTo( map );                                                                   
                                                                                    
+var EappiMarkerOptions = {
+    radius: 5,
+    fillColor: "#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
+
+for ( var i=0; i < markers.length; ++i )
+{
+   L.circleMarker( [markers[i].lat, markers[i].lng], EappiMarkerOptions )
+       .bindPopup( '<h5>' + markers[i].title + '</h5>' + markers[i].body )
+      .addTo( map );
+}
+
 </script>  
 
     </dd>
