@@ -1,0 +1,18 @@
+<dl class="portlet portletEappiLocalMap"
+    i18n:domain="eappi.map">
+
+    <dt class="portletHeader">
+        <span class="portletTopLeft"></span>
+        Eappi Local Map
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem">
+    </dd>
+
+    <dd class="portletFooter">
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
+    </dd>
+
+</dl>

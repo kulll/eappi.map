@@ -3,6 +3,10 @@
 
     <!-- -*- extra stuff goes here -*- -->
  <portlet 
+   addview="eappi.map.portlet.EappiLocalMap"
+   title="Eappi Local Map"
+   description=""/>
+ <portlet 
    addview="eappi.map.portlet.EappiInternationalMap"
    title="Eappi International Map"
    description=""/>
