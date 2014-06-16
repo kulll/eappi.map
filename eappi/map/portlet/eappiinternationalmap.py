@@ -24,9 +24,15 @@ from plone.app.collection.interfaces import ICollection
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from AccessControl import getSecurityManager
-from plone.memoize.instance import memoize
+from plone.memoize import instance
+from plone.memoize import view
+from plone.memoize import forever
 import json
 from geopy import geocoders
+from zope.schema.interfaces import IVocabularyFactory
+from zope.component import getUtility
+from wcc.vocabularies.countries import lookup_capital
+from zope.annotation.interfaces import IAnnotations
 
 
 class IEappiInternationalMap(IPortletDataProvider):
@@ -68,6 +74,7 @@ class Assignment(base.Assignment):
     def title(self):
         return _('Eappi International Map')
 
+
 class Renderer(base.Renderer):
 
     render = ViewPageTemplateFile('templates/eappiinternationalmap.pt')
@@ -76,8 +83,8 @@ class Renderer(base.Renderer):
     def available(self):
         return True
 
-    @memoize
-    def collection(self):
+    @instance.memoize
+    def _getcollection(self):
         collection_path = self.data.target_collection
         if not collection_path:
             return None
@@ -102,10 +109,11 @@ class Renderer(base.Renderer):
                 result = None
         return result
 
-    @memoize
+    @instance.memoize
     def map_marker(self):
-        collection = self.collection()
+        collection = self._getcollection()
         brains = collection.queryCatalog()
+        vocab = getUtility(IVocabularyFactory, name='wcc.vocabulary.country')
 
         if not brains:
             return None
@@ -113,21 +121,46 @@ class Renderer(base.Renderer):
         map_data = list()
         for i in brains:
             obj = i.getObject()
-            lat = self._query_geolocation(obj.title)[0]
-            lng = self._query_geolocation(obj.title)[1]
+            country = vocab.name_from_code(obj.country_code)
+            capital = lookup_capital(obj.country_code)
+            location = self.query_geolocation(country, capital)[1]
+            lat = location[0]
+            lng = location[1]
+
+            # Empty bodytext will return none
+            if obj.bodytext:
+                text = obj.bodytext.output
+            else:
+                text = ''
+
             map_data.append(
                 {'title': obj.title,
-                 'body': obj.getText(),
+                 'body': text,
                  'lat': lat,
                  'lng': lng}
                 )
         return json.dumps(map_data)
 
-    @memoize
-    def _query_geolocation(self, country):
+    def _query_geolocation(self, country, capital):
         geo = geocoders.OpenMapQuest()
-        location = geo.geocode(country)
-        return location[1]
+
+        try:
+            location = geo.geocode(country)
+        except IndexError:
+            location = geo.geocode(capital)
+        return location
+
+    @instance.memoize
+    def query_geolocation(self, country, capital):
+
+        key = "cache-%s-%s" % (country, capital)
+
+        cache = IAnnotations(self.data)
+        data = cache.get(key, None)
+        if not data:
+            data = self._query_geolocation(country, capital)
+            cache[key] = data
+        return data
 
 
 # XXX: z3cform
