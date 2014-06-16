@@ -50,6 +50,11 @@ class IEappiInternationalMap(IPortletDataProvider):
         default=350
         )
 
+    marker_size = schema.Int(
+        title=_('Map marker size'),
+        default=5
+        )
+
     """
     Define your portlet schema here
     """

@@ -39,7 +39,7 @@ L.tileLayer( 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
 }).addTo( map );                                                                   
                                                                                    
 var EappiMarkerOptions = {
-    radius: 5,
+    radius: ${view/data/marker_size},
     fillColor: "#ff7800",
     color: "#000",
     weight: 1,
