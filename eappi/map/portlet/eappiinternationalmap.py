@@ -45,6 +45,12 @@ class IEappiInternationalMap(IPortletDataProvider):
         default=1,
         )
 
+    min_zoom = schema.Int(
+        title=_('Minimum zoom'),
+        required=False,
+        default=1,
+        )
+
     map_height = schema.Int(
         title=_('Map height (in px)'),
         default=350
@@ -54,10 +60,6 @@ class IEappiInternationalMap(IPortletDataProvider):
         title=_('Map marker size'),
         default=5
         )
-
-    """
-    Define your portlet schema here
-    """
 
     target_collection = schema.Choice(
         title=_(u"Target collection"),
