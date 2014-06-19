@@ -24,7 +24,6 @@ var map = L.map( 'map', {
     minZoom: ${view/data/min_zoom},
     zoom: ${view/data/map_zoom},
     zoomControl: false,
-    maxBounds: bounds
 
 });                                                                                
 
