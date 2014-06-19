@@ -4,10 +4,10 @@
     <!-- -*- extra stuff goes here -*- -->
 
     <javascript id="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js" 
-        cacheable="True"
+        cacheable="False"
         enabled="True"
-        cookable="True"
-        compression="safe"
+        cookable="False"
+        compression="none"
         inline="False"
         authenticated="False"/>
 

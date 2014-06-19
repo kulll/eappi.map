@@ -8,10 +8,101 @@
     </dt>
 
     <dd class="portletItem">
+
+        <div id="localmap" style="height: ${view/data/map_height}px"></div>            
+
+<script src="${context/portal_url}/++resource++eappi.map/mapgeo.js" type="text/javascript"></script>                                                                                
+<script type="text/javascript">                                                 
+var bounds = new L.LatLngBounds(new L.LatLng(80.74,-159.26), new L.LatLng(-51.768,174.243));
+
+
+                                                              
+var localmap = L.map( 'localmap', {                                                          
+    center: ['31.8517', '35.1211'],                                                           
+    zoom: ${view/data/zoom},
+    minZoom: ${view/data/min_zoom},
+    zoomControl: false
+
+});                                                                                
+
+
+var localmapstyle = {
+    "stroke": 0,
+    "fillOpacity": 0
+
+};
+
+function onEachFeature(feature, layer) {
+            if (feature.properties && feature.properties.name) {
+
+            var popupContent = "<h5>" + feature.properties.name  +"</h5>";
+            }
+
+            layer.on('click',function(){
+            if(feature.properties.name == 'Jordan Valley'){
+                window.location = "${context/portal_url}${view/data/jordan_valley}";
+            }
+            else if(feature.properties.name == 'Jerusalem'){
+                window.location = "${context/portal_url}${view/data/jerusalem}";
+            }
+            else if(feature.properties.name == 'Northen West Bank'){
+                window.location = "${context/portal_url}${view/data/northern_west_bank}";
+            }
+            else if(feature.properties.name == 'Southern West Bank'){
+                window.location = "${context/portal_url}${view/data/southern_west_bank}";
+            }
+
+});
+
+            layer.on('mouseover', function(){
+            if(feature.properties.name == 'Jordan Valley'){
+               document.getElementById('LocalAreaName').textContent = feature.properties.name;
+            }
+            else if(feature.properties.name == 'Jerusalem'){
+               document.getElementById('LocalAreaName').textContent = feature.properties.name;
+            }
+            else if(feature.properties.name == 'Northen West Bank'){
+               document.getElementById('LocalAreaName').textContent = feature.properties.name;
+            }
+            else if(feature.properties.name == 'Southern West Bank'){
+               document.getElementById('LocalAreaName').textContent = feature.properties.name;
+            }
+
+
+});
+
+            layer.on('mouseout', function(){
+               document.getElementById('LocalAreaName').textContent = '';
+
+});
+
+
+            
+        }
+
+
+L.geoJson(palestine, {
+    style: localmapstyle,
+    onEachFeature:onEachFeature 
+       
+}).addTo(localmap);
+
+//For later improvement
+//map.fitBounds(bounds);
+                                                                                   
+L.tileLayer( 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {             
+    attribution: '&copy; <a href="http://osm.org/copyright" title="OpenStreetMap" target="_blank">OpenStreetMap</a> contributors | Tiles Courtesy of <a href="http://www.mapquest.com/" title="MapQuest" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png" width="16" height="16">',
+    subdomains: ['otile1','otile2','otile3','otile4']                              
+}).addTo( localmap );                                                                   
+                                                                                   
+
+</script>  
+
     </dd>
 
     <dd class="portletFooter">
-        <span class="portletBottomLeft"></span>
+        <span class="portletBottomLeft"></span> 
+        <div style="height:10px; text-align:center;" id="LocalAreaName"></div>
         <span class="portletBottomRight"></span>
     </dd>
 

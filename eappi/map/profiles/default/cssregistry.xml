@@ -7,7 +7,7 @@
  <stylesheet title=""
      id="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"
     media="screen" rel="stylesheet" rendering="import"
-    cacheable="True" compression="safe" cookable="True"
+    cacheable="False" compression="none" cookable="False"
     enabled="1" expression=""/>
 
 

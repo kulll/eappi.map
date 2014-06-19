@@ -13,7 +13,7 @@
 
                                                                                 
 <script type="text/javascript">                                                 
-var bounds = new L.LatLngBounds(new L.LatLng(80.74,-159.26), new L.LatLng(-51.768,174.243));
+var bounds = new L.LatLngBounds(new L.LatLng(80.74,-159.26), new L.LatLng(-81.768,184.243));
 
 var markers = <tal:block replace="structure view/data/map_marker"></tal:block>;
 
@@ -23,8 +23,8 @@ var map = L.map( 'map', {
     worldCopyJump: true,
     minZoom: ${view/data/min_zoom},
     zoom: ${view/data/map_zoom},
-    maxBounds: bounds,
-    bounds: bounds
+    zoomControl: false,
+    maxBounds: bounds
 
 });                                                                                
 

@@ -19,12 +19,57 @@ from plone.app.portlets.cache import render_cachekey
 from Acquisition import aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from eappi.map import MessageFactory as _
+from plone.app.vocabularies.catalog import SearchableTextSourceBinder
+from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
+
 
 class IEappiLocalMap(IPortletDataProvider):
     """
     Define your portlet schema here
     """
-    pass
+    jerusalem = schema.Choice(
+        title=_(u'Jerusalem'),
+        description=_(u''),
+        source=SearchableTextSourceBinder(
+            {'portal_type': ('Document')})
+        )
+
+    northern_west_bank = schema.Choice(
+        title=_(u'Northern West Bank'),
+        description=_(u''),
+        source=SearchableTextSourceBinder(
+            {'portal_type': ('Document')})
+        )
+
+    southern_west_bank = schema.Choice(
+        title=_(u'Southern West Bank'),
+        description=_(u''),
+        source=SearchableTextSourceBinder(
+            {'portal_type': ('Document')})
+        )
+
+    jordan_valley = schema.Choice(
+        title=_(u'Jordan Valley'),
+        description=_(u''),
+        source=SearchableTextSourceBinder(
+            {'portal_type': ('Document')})
+        )
+
+    zoom = schema.Int(
+        title=_(u'Map initial zoom'),
+        description=_(u''),
+    )
+
+    min_zoom = schema.Int(
+        title=_(u'Map minimum zoom'),
+        description=_(u''),
+    )
+
+    map_height = schema.Int(
+        title=_(u'Map height (in px)'),
+        description=_(u''),
+    )
+
 
 class Assignment(base.Assignment):
     implements(IEappiLocalMap)
@@ -45,6 +90,7 @@ class Renderer(base.Renderer):
     def available(self):
         return True
 
+
 # XXX: z3cform
 # class AddForm(z3cformhelper.AddForm):
 class AddForm(base.AddForm):
@@ -53,12 +99,17 @@ class AddForm(base.AddForm):
 #    fields = field.Fields(IEappiLocalMap)
 
     form_fields = form.Fields(IEappiLocalMap)
+    form_fields['jerusalem'].custom_widget = UberSelectionWidget
+    form_fields['northern_west_bank'].custom_widget = UberSelectionWidget
+    form_fields['southern_west_bank'].custom_widget = UberSelectionWidget
+    form_fields['jordan_valley'].custom_widget = UberSelectionWidget
 
     label = _(u"Add Eappi Local Map")
     description = _(u"")
 
     def create(self, data):
         return Assignment(**data)
+
 
 # XXX: z3cform
 # class EditForm(z3cformhelper.EditForm):
@@ -68,6 +119,10 @@ class EditForm(base.EditForm):
 #    fields = field.Fields(IEappiLocalMap)
 
     form_fields = form.Fields(IEappiLocalMap)
+    form_fields['jerusalem'].custom_widget = UberSelectionWidget
+    form_fields['northern_west_bank'].custom_widget = UberSelectionWidget
+    form_fields['southern_west_bank'].custom_widget = UberSelectionWidget
+    form_fields['jordan_valley'].custom_widget = UberSelectionWidget
 
     label = _(u"Edit Eappi Local Map")
     description = _(u"")
