@@ -45,10 +45,16 @@ var EappiMarkerOptions = {
     fillOpacity: 0.8
 };
 
+var EappiPopupOptions = {
+    maxWidth: 200,
+    maxHeight: 200,
+};
+
+
 for ( var i=0; i < markers.length; ++i )
 {
    L.circleMarker( [markers[i].lat, markers[i].lng], EappiMarkerOptions )
-       .bindPopup( '<h5>' + markers[i].title + '</h5>' + markers[i].body )
+       .bindPopup( '<h5>' + markers[i].title + '</h5>' + '<div style="padding-right:10px;">' + markers[i].body + '</div>', EappiPopupOptions)
       .addTo( map );
 }
 
