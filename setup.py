@@ -34,7 +34,6 @@ setup(name='eappi.map',
           'plone.app.multilingual',
           'plone.multilingualbehavior',
           'plone.app.versioningbehavior',
-          'five.pt',
           'wcc.vocabularies',
           # -*- Extra requirements: -*-
       ],
