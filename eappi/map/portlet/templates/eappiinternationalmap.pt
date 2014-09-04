@@ -60,7 +60,7 @@ for ( var i=0; i < markers.length; ++i )
 
 markerData.on('click', function() { 
     var content = '<div><strong>' + this.title + '</strong>' + 
-                   this.body + '</div>';;
+                   this.body + '</div>';
     info.innerHTML = content;
 
  })
