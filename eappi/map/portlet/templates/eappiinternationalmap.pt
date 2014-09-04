@@ -9,13 +9,18 @@
 
     <dd class="portletItem">
 
-    <div id="map" style="height: ${view/data/map_height}px"></div>            
+<div style="position: relative; width: 70%; z-index:9;">
+    <div id='info' style="position: absolute; left:10px; top: 10px; z-index: 1; background:#fff;border-radius:3px;padding:10px" class='info'> </div>
+</div>
+<div style="z-index:1;">
+    <div id="map" tal:attributes="style string: height:${view/data/map_height}px ;; z-index:0"></div>            
+</div>
 
                                                                                 
-<script type="text/javascript">                                                 
+<script type="text/javascript" tal:content="structure string:                                                 
 var bounds = new L.LatLngBounds(new L.LatLng(80.74,-159.26), new L.LatLng(-81.768,184.243));
 
-var markers = <tal:block replace="structure view/data/map_marker"></tal:block>;
+var markers =  ${view/data/map_marker};
 
                                                               
 var map = L.map( 'map', {                                                          
@@ -32,32 +37,49 @@ var map = L.map( 'map', {
 map.fitBounds(bounds);
                                                                                    
 L.tileLayer( 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {             
-    attribution: '&copy; <a href="http://osm.org/copyright" title="OpenStreetMap" target="_blank">OpenStreetMap</a> contributors | Tiles Courtesy of <a href="http://www.mapquest.com/" title="MapQuest" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png" width="16" height="16">',
+    attribution: &quot; &copy; <a href='http://osm.org/copyright' title='OpenStreetMap' target='_blank'>OpenStreetMap</a> contributors | Tiles Courtesy of <a href='http://www.mapquest.com/' title='MapQuest' target='_blank'>MapQuest</a> <img src='http://developer.mapquest.com/content/osm/mq_logo.png' width='16' height='16'> &quot;,
     subdomains: ['otile1','otile2','otile3','otile4']                              
 }).addTo( map );                                                                   
                                                                                    
 var EappiMarkerOptions = {
     radius: ${view/data/marker_size},
-    fillColor: "#ff7800",
-    color: "#000",
+    fillColor: '#ff7800',
+    color: '#000',
     weight: 1,
     opacity: 1,
     fillOpacity: 0.8
 };
 
-var EappiPopupOptions = {
-    maxWidth: 200,
-    maxHeight: 200,
-};
-
 
 for ( var i=0; i < markers.length; ++i )
 {
-   L.circleMarker( [markers[i].lat, markers[i].lng], EappiMarkerOptions )
-       .bindPopup( '<h5>' + markers[i].title + '</h5>' + '<div style="padding-right:10px;">' + markers[i].body + '</div>', EappiPopupOptions)
-      .addTo( map );
+  var markerData = L.circleMarker( [markers[i].lat, markers[i].lng], EappiMarkerOptions );
+
+  markerData.title = markers[i].title;
+  markerData.body = markers[i].body;
+
+markerData.on('click', function() { 
+    var content = '<div><strong>' + this.title + '</strong>' + 
+                   this.body + '</div>';;
+    info.innerHTML = content;
+
+ })
+
+            
+markerData.addTo( map );
 }
 
+map.on('move', empty);
+map.on('click', empty);
+
+empty();
+
+function empty() {
+  info.innerHTML = '<div><strong>Click a marker</strong></div>';
+  }
+
+
+">
 </script>  
 
     </dd>
