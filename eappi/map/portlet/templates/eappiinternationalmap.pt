@@ -1,4 +1,7 @@
-<dl class="portlet portletEappiInternationalMap"
+<div class="show-for-small-only">
+    Placeholder link for International map
+</div>
+<dl class="portlet portletEappiInternationalMap hide-for-small-only"
     i18n:domain="eappi.map">
 
     <dt class="portletHeader">

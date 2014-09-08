@@ -1,4 +1,7 @@
-<dl class="portlet portletEappiLocalMap"
+<div class="show-for-small-only">
+    Placeholder link for Local map
+</div>
+<dl class="portlet portletEappiLocalMap hide-for-small-only"
     i18n:domain="eappi.map">
 
     <dt class="portletHeader">
