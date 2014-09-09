@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.8 (unreleased)
+1.8 (2014-09-09)
 ----------------
 
 - Nothing changed yet.
