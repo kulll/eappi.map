@@ -1,5 +1,11 @@
 <div class="show-for-small-only">
-    Placeholder link for Local map
+    <h3>Eappi Local Map</h3>
+    <ul>
+        <li><a tal:attributes="href string:${context/portal_url}${view/data/jordan_valley}">Jordan Valley</a></li>
+        <li><a tal:attributes="href string:${context/portal_url}${view/data/northern_west_bank}">Northen West Bank</a></li>
+        <li><a tal:attributes="href string:${context/portal_url}${view/data/jerusalem}">Jerusalem</a></li>
+        <li><a tal:attributes="href string:${context/portal_url}${view/data/southern_west_bank}">Southern West Bank</a></li>
+    <ul>
 </div>
 <dl class="portlet portletEappiLocalMap hide-for-small-only"
     i18n:domain="eappi.map">
