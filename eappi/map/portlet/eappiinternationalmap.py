@@ -117,7 +117,7 @@ class Renderer(base.Renderer):
         return result
 
     @instance.memoize
-    def map_marker(self):
+    def map_marker(self, hidden=None):
         collection = self._getcollection()
         brains = collection.queryCatalog()
         vocab = getUtility(IVocabularyFactory, name='wcc.vocabulary.country')
@@ -146,6 +146,8 @@ class Renderer(base.Renderer):
                  'lat': lat,
                  'lng': lng}
                 )
+        if hidden:
+            return map_data
         return json.dumps(map_data)
 
     def _query_geolocation(self, country, capital):

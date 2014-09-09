@@ -1,5 +1,12 @@
 <div class="show-for-small-only">
-    Placeholder link for International map
+    <h3>Eappi International map</h3>
+    <div tal:repeat="country python:view.data.map_marker(True)">
+        <strong tal:content="country/title"></strong>
+        <p tal:replace=" structure country/body"></p>
+    </div>
+    
+
+
 </div>
 <dl class="portlet portletEappiInternationalMap hide-for-small-only"
     i18n:domain="eappi.map">
