@@ -1,6 +1,6 @@
 <div class="show-for-small-only">
     <h3>Eappi International map</h3>
-    <div tal:repeat="country python:view.data.map_marker(True)">
+    <div style="border: 1px solid #CCC; padding: 10px; margin: 10px;" tal:repeat="country python:view.data.map_marker(True)">
         <strong tal:content="country/title"></strong>
         <p tal:replace=" structure country/body"></p>
     </div>
