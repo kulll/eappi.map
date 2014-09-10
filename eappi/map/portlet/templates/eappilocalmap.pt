@@ -23,7 +23,7 @@
 
 <script tal:attributes="src string:${context/portal_url}/++resource++eappi.map/mapgeo.js" type="text/javascript"></script>                                                                                
 
-<tal:script define="attribution string: &quot; &copy; <a href='http://osm.org/copyright' title='OpenStreetMap' target='_blank'>OpenStreetMap</a> contributors | Tiles Courtesy of <a href='http://www.mapquest.com/' title='MapQuest' target='_blank'>MapQuest</a> <img src='http://developer.mapquest.com/content/osm/mq_logo.png' width='16' height='16'>&quot; ">
+<tal:script define="attribution string: &quot; &copy; <a href='https://osm.org/copyright' title='OpenStreetMap' target='_blank'>OpenStreetMap</a> contributors | Tiles Courtesy of <a href='https://www.mapquest.com/' title='MapQuest' target='_blank'>MapQuest</a> <img src='https://developer.mapquest.com/content/osm/mq_logo.png' width='16' height='16'>&quot; ">
 <script type="text/javascript" tal:content="structure string:                                                 
 var bounds = new L.LatLngBounds(new L.LatLng(80.74,-159.26), new L.LatLng(-51.768,174.243));
 
@@ -120,7 +120,7 @@ geojson = L.geoJson(palestine, {
 //For later improvement
 //map.fitBounds(bounds);
                                                                                    
-L.tileLayer( 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {             
+L.tileLayer( 'https://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {             
     attribution:${attribution},
     subdomains: ['otile1','otile2','otile3','otile4']                              
 }).addTo( localmap );                                                                   
