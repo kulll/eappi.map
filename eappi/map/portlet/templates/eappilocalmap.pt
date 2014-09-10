@@ -2,7 +2,7 @@
     <h3>Eappi Local Map</h3>
     <ul>
         <li><a tal:attributes="href string:${context/portal_url}${view/data/jordan_valley}">Jordan Valley</a></li>
-        <li><a tal:attributes="href string:${context/portal_url}${view/data/northern_west_bank}">Northen West Bank</a></li>
+        <li><a tal:attributes="href string:${context/portal_url}${view/data/northern_west_bank}">Northern West Bank</a></li>
         <li><a tal:attributes="href string:${context/portal_url}${view/data/jerusalem}">Jerusalem</a></li>
         <li><a tal:attributes="href string:${context/portal_url}${view/data/southern_west_bank}">Southern West Bank</a></li>
     <ul>
@@ -61,7 +61,7 @@ function onEachFeature(feature, layer) {
             else if(feature.properties.name == 'Jerusalem'){
                 window.location = '${context/portal_url}${view/data/jerusalem}';
             }
-            else if(feature.properties.name == 'Northen West Bank'){
+            else if(feature.properties.name == 'Northern West Bank'){
                 window.location = '${context/portal_url}${view/data/northern_west_bank}';
             }
             else if(feature.properties.name == 'Southern West Bank'){
@@ -77,7 +77,7 @@ function onEachFeature(feature, layer) {
             else if(feature.properties.name == 'Jerusalem'){
                document.getElementById('LocalAreaName').textContent = feature.properties.name;
             }
-            else if(feature.properties.name == 'Northen West Bank'){
+            else if(feature.properties.name == 'Northern West Bank'){
                document.getElementById('LocalAreaName').textContent = feature.properties.name;
             }
             else if(feature.properties.name == 'Southern West Bank'){
