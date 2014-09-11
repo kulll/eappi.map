@@ -120,7 +120,7 @@ geojson = L.geoJson(palestine, {
 //For later improvement
 //map.fitBounds(bounds);
                                                                                    
-L.tileLayer( 'https://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {             
+L.tileLayer( 'https://{s}-s.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {             
     attribution:${attribution},
     subdomains: ['otile1','otile2','otile3','otile4']                              
 }).addTo( localmap );                                                                   
