@@ -3,7 +3,7 @@
 
     <!-- -*- extra stuff goes here -*- -->
 
-    <javascript id="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js" 
+    <javascript id="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js" 
         cacheable="False"
         enabled="True"
         cookable="False"
