@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.16dev0 (feb 17)
+-----------------
+-register settings, revised code, add open map quest field, added settings
+
+
 1.15 (unreleased)
 -----------------
 
