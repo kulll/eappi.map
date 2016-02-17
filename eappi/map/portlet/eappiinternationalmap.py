@@ -33,6 +33,8 @@ from zope.schema.interfaces import IVocabularyFactory
 from zope.component import getUtility
 from wcc.vocabularies.countries import lookup_capital
 from zope.annotation.interfaces import IAnnotations
+from eappi.map import getSettings
+import requests
 
 
 class IEappiInternationalMap(IPortletDataProvider):
@@ -121,6 +123,10 @@ class Renderer(base.Renderer):
         collection = self._getcollection()
         brains = collection.queryCatalog()
         vocab = getUtility(IVocabularyFactory, name='wcc.vocabulary.country')
+        api_key = ''
+        settings  = getSettings()
+        if settings.openmapquest_api_key:
+            api_key = settings.openmapquest_api_key
 
         if not brains:
             return None
@@ -130,9 +136,37 @@ class Renderer(base.Renderer):
             obj = i.getObject()
             country = vocab.name_from_code(obj.country_code)
             capital = lookup_capital(obj.country_code)
-            location = self.query_geolocation(country, capital)[1]
-            lat = location[0]
-            lng = location[1]
+            
+            if country == "C\xc3\xb4te d'Ivoire":
+                query = "&country=Cote d'Ivoire"
+            elif country in ['Netherlands Antilles']:
+                query = "&location="+capital
+            else:
+                query ='&country='+country
+                
+            loc = requests.get('http://open.mapquestapi.com/geocoding/v1/address?key='+api_key+query)
+            if not loc:
+                loc = requests.get('http://open.mapquestapi.com/geocoding/v1/address?key='+api_key+'&capital='+capital)
+            
+            
+            
+            #additional condition to fix problem with congo
+            if not loc:
+                return ''
+            
+            location = loc.json()
+    
+            #place, (lat, lng) = location
+            if location['info']['statuscode'] == 0:
+                lat = location['results'][0]['locations'][0]['latLng']['lat']
+                lng = location['results'][0]['locations'][0]['latLng']['lng']
+            else:
+                lat = 0
+                lng = 0
+            
+            #location = self.query_geolocation(country, capital)[1]
+            #lat = location[0]
+            #lng = location[1]
 
             # Empty bodytext will return none
             if obj.bodytext:
