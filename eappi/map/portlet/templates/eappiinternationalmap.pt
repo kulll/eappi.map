@@ -19,7 +19,7 @@
 
     <dd class="portletItem">
 
-<div style="position: relative; width: 70%; z-index:9;">
+<!--<div style="position: relative; width: 70%; z-index:9;">
     <div id='info' style="position: absolute; left:10px; top: 10px; z-index: 1; background:#fff;border-radius:3px;padding:10px" class='info'> </div>
 </div>
 <div style="z-index:1;">
@@ -98,5 +98,10 @@ function empty() {
         <span class="portletBottomLeft"></span>
         <span class="portletBottomRight"></span>
     </dd>
-
+-->
 </dl>
+
+<div tal:define="source_img view/data/static_map">
+    <!--<img tal:attributes="src string:https://www.mapquestapi.com/staticmap/v4/getmap?key=KEY&size=900,500&type=map&imagetype=png&pois=1,40.0986,-76.3988,0,0|2,40.0692,-76.4012|3,40.0981,-76.3461|4,15.8564,121.131104"/>-->
+    <img tal:attributes="src source_img" alt='Map'/>
+</div>

@@ -144,9 +144,9 @@ class Renderer(base.Renderer):
             else:
                 query ='&country='+country
                 
-            loc = requests.get('http://open.mapquestapi.com/geocoding/v1/address?key='+api_key+query)
-            if not loc:
-                loc = requests.get('http://open.mapquestapi.com/geocoding/v1/address?key='+api_key+'&capital='+capital)
+            loc = requests.get('http://www.mapquestapi.com/geocoding/v1/address?key='+api_key+query)
+            #if not loc:
+            #    loc = requests.get('http:www//open.mapquestapi.com/geocoding/v1/address?key='+api_key+'&capital='+capital)
             
             
             
@@ -204,6 +204,65 @@ class Renderer(base.Renderer):
             data = self._query_geolocation(country, capital)
             cache[key] = data
         return data
+    
+    @instance.memoize
+    def static_map(self):
+        source = 'https://www.mapquestapi.com/staticmap/v4/getmap?key='
+        collection = self._getcollection()
+        brains = collection.queryCatalog()
+        vocab = getUtility(IVocabularyFactory, name='wcc.vocabulary.country')
+        api_key = ''
+        settings  = getSettings()
+        if settings.openmapquest_api_key:
+            api_key = settings.openmapquest_api_key
+        
+        source += api_key+'&size=900,500&type=map&imagetype=png&pois='
+        if not brains:
+            return None
+        map_data = list()
+        for brain in brains:
+            obj = brain.getObject()
+            country = vocab.name_from_code(obj.country_code)
+            capital = lookup_capital(obj.country_code)
+            
+            if country == "C\xc3\xb4te d'Ivoire":
+                query = "&country=Cote d'Ivoire"
+            elif country in ['Netherlands Antilles']:
+                query = "&location="+capital
+            else:
+                query ='&country='+country
+            
+            loc = requests.get('http://www.mapquestapi.com/geocoding/v1/address?key='+api_key+query)
+            if not loc:
+                return ''
+            
+            location = loc.json()
+    
+            #place, (lat, lng) = location
+            if location['info']['statuscode'] == 0:
+                lat = location['results'][0]['locations'][0]['latLng']['lat']
+                lng = location['results'][0]['locations'][0]['latLng']['lng']
+            else:
+                lat = 0
+                lng = 0
+            
+            map_data.append(
+                {'title':obj.title,
+                 'lat': lat,
+                 'lng': lng})
+        
+        if len(map_data):
+            for mapd in map_data:
+                indx = map_data.index(mapd)
+                
+                source += str(indx+1)+','+str(mapd['lat'])+','+str(mapd['lng'])
+                if indx == 0:
+                    source += ',0,0'
+                if (indx+1) != len(map_data):
+                    source += '|'
+        
+    
+        return source
 
 
 # XXX: z3cform
