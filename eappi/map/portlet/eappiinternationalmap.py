@@ -263,6 +263,62 @@ class Renderer(base.Renderer):
         
     
         return source
+    
+    @instance.memoize
+    def mapquest_api_key(self):
+        api_key = ''
+        settings  = getSettings()
+        if settings.openmapquest_api_key:
+            api_key = settings.openmapquest_api_key
+        return api_key
+    
+    @instance.memoize
+    def geocode_map(self):
+        collection = self._getcollection()
+        if not collection:
+            return []
+        brains = collection.queryCatalog()
+        vocab = getUtility(IVocabularyFactory, name='wcc.vocabulary.country')
+        countries = []
+        if not brains:
+            return countries
+        for brain in brains:
+            obj = brain.getObject()
+            country = vocab.name_from_code(obj.country_code)
+            capital = lookup_capital(obj.country_code)
+            if country == "C\xc3\xb4te d'Ivoire":
+                countries.append("Cote d'Ivoire")
+            elif country in ['Netherlands Antilles']:
+                countries.append(capital)
+            else:
+                countries.append(country)
+        return countries
+    
+    @instance.memoize
+    def orig_country_names(self):
+        collection = self._getcollection()
+        if not collection:
+            return []
+        brains = collection.queryCatalog()
+        vocab = getUtility(IVocabularyFactory, name='wcc.vocabulary.country')
+        countries = {}
+        if not brains:
+            return countries
+        for brain in brains:
+            obj = brain.getObject()
+            country = vocab.name_from_code(obj.country_code)
+            capital = lookup_capital(obj.country_code)
+            if country not in countries.keys():
+                if country == "C\xc3\xb4te d'Ivoire":
+                    countries["Cote d'Ivoire"] = "Cote d'Ivoire"
+                elif country in ['Netherlands Antilles']:
+                    countries[capital] = 'Netherlands Antilles'
+                else:
+                    countries[country] = country
+        return countries
+        
+        
+        
 
 
 # XXX: z3cform
