@@ -121,6 +121,8 @@ class Renderer(base.Renderer):
     @instance.memoize
     def map_marker(self, hidden=None):
         collection = self._getcollection()
+        if not collection or None:
+            return {}
         brains = collection.queryCatalog()
         vocab = getUtility(IVocabularyFactory, name='wcc.vocabulary.country')
         api_key = ''
@@ -297,8 +299,8 @@ class Renderer(base.Renderer):
     @instance.memoize
     def orig_country_names(self):
         collection = self._getcollection()
-        if not collection:
-            return []
+        if not collection or None:
+            return {}
         brains = collection.queryCatalog()
         vocab = getUtility(IVocabularyFactory, name='wcc.vocabulary.country')
         countries = {}
