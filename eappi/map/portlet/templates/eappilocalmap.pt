@@ -1,4 +1,4 @@
-<div class="show-for-small-only">
+<!--<div class="show-for-small-only">
     <h3>Eappi Local Map</h3>
     <ul>
         <li><a tal:attributes="href string:${context/portal_url}${view/data/jordan_valley}">Jordan Valley</a></li>
@@ -136,4 +136,86 @@ L.tileLayer( 'https://{s}-s.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
         <span class="portletBottomRight"></span>
     </dd>
 
-</dl>
+</dl>-->
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.js"></script>
+    <script tal:attributes="src string:https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key=${view/data/mapquest_api_key}"></script>
+    <script tal:attributes="src string:https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-geocoding.js?key=${view/data/mapquest_api_key}"></script>
+
+<script type="text/javascript" tal:content="structure string:
+    var countries = ['Amman', 'Jerusalem', 'Hebron', 'Ramallah'];
+        var data = ${view/data/contents};
+        var urls = {'Amman':{'latlng':'', url:data['Amman']}};
+        urls['Jerusalem'] = {'latlng':'', url:data['Jerusalem']};
+        urls['Hebron'] = {'latlng':'', url:data['Hebron']};
+        urls['Ramallah'] = {'latlng':'', url:data['Ramallah']};
+    
+    
+    window.onload = function() {
+        
+        MQ.geocode().search(countries)
+            .on('success', function(e) {
+                var results = e.result,
+                    html = '',
+                    group = [],
+                    features,
+                    marker,
+                    result,
+                    latlng,
+                    prop,
+                    best,
+                    val,
+                    map,
+                    r,
+                    i;
+
+                map = L.map('mapid', {
+                    layers: MQ.mapLayer(),
+                    center:['31.8517', '35.1211'],
+                    zoom: ${view/data/zoom}
+                });
+
+                for (var i = 0; i < results.length; i++) {
+                    
+                    result = results[i].best;
+                    latlng = result.latlng;
+
+                    
+                    urls[countries[i]]['latlng'] = (latlng.lat+latlng.lng).toString();
+                    
+                    
+                    // create POI markers for each location
+                    marker = L.marker([ latlng.lat, latlng.lng ])
+                          .on('click', function(e){
+                            window.location = get_url((e.latlng.lat+e.latlng.lng).toString());
+                            
+                            });
+
+                    group.push(marker);
+                }
+
+                // add POI markers to the map and zoom to the features
+                features = L.featureGroup(group).addTo(map);
+                map.fitBounds(features.getBounds());
+
+                // show location information
+                //L.DomUtil.get('info').innerHTML = html;
+            });
+        };
+        
+        function get_url(coord){
+            
+            for (i=0; i<4; i++){
+                if (urls[countries[i]]['latlng'] == coord){
+                    
+                    return urls[countries[i]]['url'];
+                }
+            }
+            return '#';
+        }
+    
+">
+</script>
+<div id="mapid" style="height: 450px"></div>
