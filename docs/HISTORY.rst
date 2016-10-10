@@ -1,5 +1,11 @@
 Changelog
 =========
+1.16dev3 (oct 10)
+-version change empty list to empty dict
+
+1.16dev2 (sept 13)
+-change empty list to empty dict
+
 1.16dev1 (aug 31)
 ------------------
 -map revised, adjusted the map and used static map due to discontinued tile service
