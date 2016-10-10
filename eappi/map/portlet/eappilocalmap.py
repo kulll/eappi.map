@@ -21,6 +21,9 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from eappi.map import MessageFactory as _
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
+from eappi.map import getSettings
+from plone.memoize import instance
+from AccessControl import getSecurityManager
 
 
 class IEappiLocalMap(IPortletDataProvider):
@@ -85,10 +88,56 @@ class Assignment(base.Assignment):
 class Renderer(base.Renderer):
     
     render = ViewPageTemplateFile('templates/eappilocalmap.pt')
+    
+    @instance.memoize
+    def _getcollection(self, target):
+        collection_path = getattr(self.data,target)
+        if not collection_path:
+            return None
+
+        if collection_path.startswith('/'):
+            collection_path = collection_path[1:]
+
+        if not collection_path:
+            return None
+
+        portal_state = getMultiAdapter((self.context, self.request),
+                                       name=u'plone_portal_state')
+        portal = portal_state.portal()
+        if isinstance(collection_path, unicode):
+            # restrictedTraverse accepts only strings
+            collection_path = str(collection_path)
+
+        result = portal.unrestrictedTraverse(collection_path, default=None)
+        if result is not None:
+            sm = getSecurityManager()
+            if not sm.checkPermission('View', result):
+                result = None
+        return result
 
     @property
     def available(self):
         return True
+    
+    @instance.memoize
+    def mapquest_api_key(self):
+        api_key = ''
+        settings  = getSettings()
+        if settings.openmapquest_api_key:
+            api_key = settings.openmapquest_api_key
+        return api_key
+    
+    
+    @instance.memoize
+    def contents(self):
+        data = {}
+        
+        data['Amman'] = self._getcollection('jordan_valley').absolute_url()
+        data['Jerusalem'] = self._getcollection('jerusalem').absolute_url()
+        data['Ramallah'] = self._getcollection('northern_west_bank').absolute_url()
+        data['Hebron'] = self._getcollection('southern_west_bank').absolute_url()
+        return data
+        
 
 
 # XXX: z3cform
