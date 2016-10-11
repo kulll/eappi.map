@@ -1,5 +1,8 @@
 Changelog
 =========
+1.16dev4 (oct 11)
+-fixed map portlet
+
 1.16dev3 (oct 10)
 -version change empty list to empty dict
 
