@@ -57,6 +57,11 @@ class IEappiInternationalMap(IPortletDataProvider):
         title=_('Map height (in px)'),
         default=350
         )
+    
+    map_width = schema.Int(
+        title = _('Map width (in px)'),
+        default = 250,
+    )
 
     marker_size = schema.Int(
         title=_('Map marker size'),
@@ -318,6 +323,13 @@ class Renderer(base.Renderer):
                 else:
                     countries[country] = country
         return countries
+    
+    @instance.memoize
+    def map_dimension(self):
+        map_height = self.data.map_height if self.data.map_height else 350
+        map_width = self.data.map_height if self.data.map_width else 250
+        return 'height:%spx; width:%spx;' % (map_height, map_width)
+        
         
         
         
