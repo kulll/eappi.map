@@ -172,7 +172,7 @@ window.onload = function() {
                 map.fitBounds(features.getBounds());
 
                 // show location information
-                L.DomUtil.get('info').innerHTML = html;
+                //L.DomUtil.get('info').innerHTML = html;
             });
         }
 
@@ -181,4 +181,4 @@ window.onload = function() {
     
 </script>
 
-<div id='map' style='width:900px; height:530px;'></div>
+<div id='map' tal:attributes="style string:${view/data/map_dimension}"></div>
