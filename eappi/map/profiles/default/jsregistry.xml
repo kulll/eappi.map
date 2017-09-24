@@ -3,7 +3,15 @@
 
     <!-- -*- extra stuff goes here -*- -->
 
-    <javascript id="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js" 
+    <!--<javascript id="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js" 
+        cacheable="False"
+        enabled="True"
+        cookable="False"
+        compression="none"
+        inline="False"
+        authenticated="False"/>-->
+    
+    <javascript id="https://www.gstatic.com/charts/loader.js" 
         cacheable="False"
         enabled="True"
         cookable="False"

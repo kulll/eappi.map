@@ -138,7 +138,7 @@ L.tileLayer( 'https://{s}-s.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
 
 </dl>-->
 
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.css" />
+ <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.css" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.js"></script>
     <script tal:attributes="src string:https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key=${view/data/mapquest_api_key}"></script>
@@ -217,5 +217,80 @@ L.tileLayer( 'https://{s}-s.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
         }
     
 ">
+</script>-->
+
+<!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
+
+<script type="text/javascript">
+    google.charts.load('current', {
+        'packages':['geochart'],
+        'mapsApiKey': 'AIzaSyDIy0eQe5uJQ0-3A7MAYXHVMqlOWRp9rnw'
+      });
+    var options1 = {};
+    var location_jerusalem;
+    var location_jordan;
+    window.onload = function(){
+        location_jerusalem = document.getElementById('location_jerusalem').innerHTML;
+    };
+    
+    
+    var data_array1 = [['Country', 'Location'], ['Amman', 'Jordan Valley'],['Jerusalem', 'Jerusalem'], ['Hebron', 'Southern West Bank'], ['Ramallah', 'Northern West Bank']];
+    // 31.963158, 35.930359 - Amman - Jordan Valley
+    // 31.771959, 35.217018  Jerusalem
+    // 31.53333333, 35.09500000 - Hebron North Westbank
+    // 31.898043 35.204269 - Ramallah - South Westbank
+    
+    //var data_array = [['Country', 'Location'], [31.963158, 35.930359], [31.771959, 35.217018], [31.53333333, 35.09500000], [31.898043, 35.204269]];
+    google.charts.setOnLoadCallback(localRegionsMap);
+    
+    function localRegionsMap() {
+        
+        data1 = google.visualization.arrayToDataTable(data_array1);
+        options1.region = 'PS';
+        options1.dataMode = 'regions';
+        options1.displayMode = 'markers';
+        options1.colors = ['#C7D6D8', '#5F91C0'];
+        options1.enableRegionInteractivity = true;
+        
+        var chart1 = new google.visualization.GeoChart(document.getElementById('mapid'));
+        google.visualization.events.addListener(chart1, 'select', redirect);
+        
+        chart1.draw(data1, options1);
+    }
+    
+    function redirect(obj){
+        return true;
+        //alert(obj.region)
+        
+    }
+    
 </script>
-<div id="mapid" style="height: 450px"></div>
+<div id="mapid" tal:attributes="style string: ${view/data/map_dimension}"></div>
+
+<ul>
+    <li><a tal:attributes="href string: ${context/portal_url}${view/data/jerusalem}">Jerusalem</a></li>
+    <li><a tal:attributes="href string: ${context/portal_url}${view/data/northern_west_bank}">Northern West Bank</a></li>
+    <li><a tal:attributes="href string: ${context/portal_url}${view/data/southern_west_bank}">Southern West Bank</a></li>
+    <li><a tal:attributes="href string: ${context/portal_url}${view/data/jordan_valley}">Jordan Valley</a></li>
+</ul>
+
+<!--<div style="width: 50%; float: left">
+    <div tal:condition="string: ${context/portal_url}${view/data/jerusalem}">
+        <a tal:attributes="href string: ${context/portal_url}${view/data/jerusalem}">Jerusalem</a><br/><br/>
+    </div>
+    <div tal:condition="string: ${context/portal_url}${view/data/jordan_valley}">
+        <a tal:attributes="href string: ${context/portal_url}${view/data/jordan_valley}">Jordan Valley</a><br/>
+    </div>
+</div>
+<div style="width: 50%; float: left">
+    <div tal:condition="string: ${context/portal_url}${view/data/northern_west_bank}">
+        <a tal:attributes="href string: ${context/portal_url}${view/data/northern_west_bank}">Northern West Bank</a><br/><br/>
+    </div>
+    <div tal:condition="string: ${context/portal_url}${view/data/southern_west_bank}">
+        <a tal:attributes="href string: ${context/portal_url}${view/data/southern_west_bank}">Southern West Bank</a><br/>
+    </div>
+</div>-->
+<div style='display: none' id="location_jerusalem" tal:content="string: ${context/portal_url}${view/data/jerusalem}"></div>
+<div style='display: none' id="location_jordan" tal:content="string: ${context/portal_url}${view/data/jordan_valley}"></div>
+<div style='display: none' id="location_northern_westbank" tal:content="string: ${context/portal_url}${view/data/northern_west_bank}"></div>
+<div style='display: none' id="location_southern_westbank" tal:content="string: ${context/portal_url}${view/data/southern_west_bank}"></div>

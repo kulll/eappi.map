@@ -319,7 +319,7 @@ class Renderer(base.Renderer):
                 if country == "C\xc3\xb4te d'Ivoire":
                     countries["Cote d'Ivoire"] = "Cote d'Ivoire"
                 elif country in ['Netherlands Antilles']:
-                    countries[capital] = 'Netherlands Antilles'
+                    countries[country] = 'Willemstad'
                 else:
                     countries[country] = country
         return countries

@@ -1,3 +1,18 @@
+<style type="text/css">
+    .zoom-button{
+        box-sizing: border-box;
+        padding: 3px;
+        border: 1px solid;
+        color: #113d2b;
+        line-height: 1.42857143;
+        cursor: pointer;
+        background-color: #f9f9f9;
+    }
+    
+    #int_container{
+        /*overflow: hidden;*/
+    }
+</style>
 <div class="show-for-small-only">
     <h3>Eappi International map</h3>
     <div style="border: 1px solid #CCC; padding: 10px; margin: 10px;" tal:repeat="country python:view.data.map_marker(True)">
@@ -111,7 +126,7 @@ function empty() {
     <script tal:attributes="src string:https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key=${view/data/mapquest_api_key}"></script>
     <script tal:attributes="src string:https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-geocoding.js?key=${view/data/mapquest_api_key}"></script>
 
-<script type="text/javascript" tal:content="structure string:
+<!--<script type="text/javascript" tal:content="structure string:
 window.onload = function() {
         var countries = ${view/data/geocode_map};
         var orig_names = ${view/data/orig_country_names}
@@ -179,6 +194,130 @@ window.onload = function() {
 
 ">
     
+</script>-->
+
+<!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
+
+<script type="text/javascript">
+    google.charts.load('current', {
+        'packages':['geochart'],
+        // Note: you will need to get a mapsApiKey for your project.
+        // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+        'mapsApiKey': 'AIzaSyDIy0eQe5uJQ0-3A7MAYXHVMqlOWRp9rnw'
+      });
+    //google.load("visualization", "1", {packages:["geochart"], mapsApiKey:'AIzaSyDIy0eQe5uJQ0-3A7MAYXHVMqlOWRp9rnw'});
+   
+    var options = {};
+    var chart1;
+    var data;
+    var data_array = [];
+    var zoom_level = 1.0;
+    google.charts.setOnLoadCallback(drawRegionsMap);
+    function drawRegionsMap() {
+        $('div.source_elements').each(function(){
+            var sub_array = [];
+            if ($(this).html() == 'Willemstad'){
+                sub_array.push($(this).html(), 'Netherlands Antilles');
+            }else{
+                sub_array.push($(this).html(), $(this).html());
+            }
+            
+            data_array.push(sub_array);
+            
+        });
+        
+        
+        data = google.visualization.arrayToDataTable(data_array);
+        
+        options.dataMode = 'regions';
+        options.colors = ['#C7D6D8', '#5F91C0'];
+        
+        options.displayMode = 'markers';
+        //options.showZoomOut = true;
+        //options.zoomOutLabel = 'Zoom Out';
+        
+        
+        options.showZoomOut = true;
+        //options['zoomOutLabel'] = 'Zoom Out';
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+        
+        
+        
+        //google.visualization.events.addListener(chart, 'regionClick', zoom);
+        
+        
+        default_zoom = document.getElementById('int_default_zoom').innerHTML;
+        if (!isNaN(default_zoom) && default_zoom !== ''){
+            zoom_level = parseFloat(default_zoom);
+        }
+        
+        google.visualization.events.addListener(chart, 'ready', function() {
+            $("#regions_div").css("zoom",zoom_level).css('-moz-transform', zoom_level).css('-moz-transform', 'scale('+String(zoom_level)+')');
+            $('#regions_div').css('-moz-transform-origin', 'left top');
+            $('#regions_div').css('-webkit-transform', 'scale('+String(zoom_level)+')');
+            });
+        chart.draw(data, options);
+        
+    }
+    
+    
+    
+    $(document).ready(function(){
+        /*var data_array = [['Country', 'Country']];
+        $('div.source_elements').each(function(){
+            var sub_array = [];
+            sub_array.push($(this).html(), $(this).html());
+            data_array.push(sub_array);
+        });*/
+        //$('div#regions_div').css('zoom',1);
+        
+        
+        $('td#int_zoom_in').click(function(){
+            
+            zoom_level += 0.05;
+            
+            $('div#regions_div').css('zoom', zoom_level).css('-moz-transform', 'scale('+String(zoom_level)+')');
+            $('#regions_div').css('-moz-transform-origin', 'left top');
+            $('#regions_div').css('-webkit-transform', 'scale('+String(zoom_level)+')');
+        });
+        $('td#int_zoom_out').click(function(){
+            zoom_level -= 0.05;
+            $('div#regions_div').css('zoom',zoom_level).css('-moz-transform', 'scale('+String(zoom_level)+')');
+            $('#regions_div').css('-moz-transform-origin', 'left top');
+            $('#regions_div').css('-webkit-transform', 'scale('+String(zoom_level)+')');
+        });
+    });
 </script>
 
-<div id='map' tal:attributes="style string:${view/data/map_dimension}"></div>
+<!--<div id='map' tal:attributes="style string:${view/data/map_dimension}"></div>-->
+
+<div id="int_container" tal:attributes="style string:${view/data/map_dimension}">
+    <div id="regions_div" ></div>
+    
+    
+</div>
+<div>
+    <table>
+        <tr>
+            <td id="int_zoom_out" style="border: 1px solid ; cursor: pointer">-</td>
+            <td id="int_zoom_in" style="border: 1px solid; cursor: pointer">+</td>
+            
+        </tr>
+    </table>
+</div>
+
+
+<div tal:define="country_names view/data/orig_country_names" style="display: none">
+    
+    <tal:if tal:condition="country_names" tal:repeat="country python: list(country_names.values())">
+        <tal:if tal:condition="python: country != 'Willemstad'">
+            <div class="source_elements" tal:content="country"></div>
+        </tal:if>
+    </tal:if>
+    <tal:if tal:condition="python:'Willemstad' in list(country_names.values())">
+        <div class="source_elements">Willemstad</div>
+    </tal:if>
+    
+</div>
+
+<span style='display: none' id="int_default_zoom" tal:content="string: ${view/data/map_zoom}"></span>

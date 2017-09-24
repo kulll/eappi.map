@@ -1,5 +1,8 @@
 Changelog
 =========
+1.16dev5 (june 23)
+-fixed map country issue
+
 1.16dev4 (oct 11)
 -fixed map portlet
 

@@ -138,7 +138,10 @@ class Renderer(base.Renderer):
         data['Hebron'] = self._getcollection('southern_west_bank').absolute_url()
         return data
         
-
+    @instance.memoize
+    def map_dimension(self):
+        map_height = self.data.map_height if self.data.map_height else 400
+        return 'height:%spx;' % (map_height)
 
 # XXX: z3cform
 # class AddForm(z3cformhelper.AddForm):
