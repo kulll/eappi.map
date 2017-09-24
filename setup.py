@@ -1,11 +1,8 @@
 from setuptools import setup, find_packages
 import os
 
-<<<<<<< HEAD
 version = '1.17'
-=======
-version = '1.16dev5'
->>>>>>> b112a8e0023a635975eaf9437b0c0872b197c8df
+
 
 setup(name='eappi.map',
       version=version,
