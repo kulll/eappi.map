@@ -227,11 +227,6 @@ L.tileLayer( 'https://{s}-s.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
         'mapsApiKey': 'AIzaSyDIy0eQe5uJQ0-3A7MAYXHVMqlOWRp9rnw'
       });
     var options1 = {};
-    var location_jerusalem;
-    var location_jordan;
-    window.onload = function(){
-        location_jerusalem = document.getElementById('location_jerusalem').innerHTML;
-    };
     
     
     var data_array1 = [['Country', 'Location'], ['Amman', 'Jordan Valley'],['Jerusalem', 'Jerusalem'], ['Hebron', 'Southern West Bank'], ['Ramallah', 'Northern West Bank']];
@@ -243,7 +238,8 @@ L.tileLayer( 'https://{s}-s.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
     //var data_array = [['Country', 'Location'], [31.963158, 35.930359], [31.771959, 35.217018], [31.53333333, 35.09500000], [31.898043, 35.204269]];
     google.charts.setOnLoadCallback(localRegionsMap);
     
-    function localRegionsMap() {
+    // for geo chart
+    /*function localRegionsMap() {
         
         data1 = google.visualization.arrayToDataTable(data_array1);
         options1.region = 'PS';
@@ -256,11 +252,38 @@ L.tileLayer( 'https://{s}-s.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
         google.visualization.events.addListener(chart1, 'select', redirect);
         
         chart1.draw(data1, options1);
+    }*/
+    
+    // for geo map
+    function localRegionsMap(){
+        data1 = google.visualization.arrayToDataTable(data_array1);
+        
+        
+        /*data1 = new google.visualization.DataTable();
+        data1.addColumn('string', 'Country');
+        data1.addColumn('string', 'Name');
+        
+        data1.addRows(['Amman', 'Jordan Valley']);
+        data1.addRows(['Jerusalem', 'Jerusalem']);
+        data1.addRows(['Hebron', 'Southern West Bank']);
+        data1.addRows(['Ramallah', 'Northern West Bank']);*/
+        
+        
+        var options1 = {
+            showTooltip: true,
+            showInfoWindow: true
+        };
+        
+        var chart1 = new google.visualization.Map(document.getElementById('mapid'));
+        chart1.draw(data1, options1);
+        
+        //google.visualization.events.addListener(chart1, 'select', redirect);
     }
     
     function redirect(obj){
+        
         return true;
-        //alert(obj.region)
+        
         
     }
     
