@@ -327,10 +327,14 @@ class Renderer(base.Renderer):
     @instance.memoize
     def map_dimension(self):
         map_height = self.data.map_height if self.data.map_height else 350
-        map_width = self.data.map_height if self.data.map_width else 250
+        map_width = self.data.map_width if self.data.map_width else 300
         return 'height:%spx; width:%spx;' % (map_height, map_width)
         
-        
+    
+    @instance.memoize
+    def width_dimension(self):
+        map_width = self.data.map_width if self.data.map_width else 300
+        return 'width:%spx;' % map_width
         
         
 
