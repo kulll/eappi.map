@@ -223,7 +223,7 @@ L.tileLayer( 'https://{s}-s.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
 
 <script type="text/javascript">
     google.charts.load('current', {
-        'packages':['geochart'],
+        'packages':['map'],
         'mapsApiKey': 'AIzaSyDIy0eQe5uJQ0-3A7MAYXHVMqlOWRp9rnw'
       });
     var options1 = {};
